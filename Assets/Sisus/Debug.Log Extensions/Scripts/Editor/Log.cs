@@ -1,0 +1,223 @@
+﻿using System;
+using UnityEngine;
+using UnityEditor;
+using Object = UnityEngine.Object;
+
+namespace Sisus.Debugging.Console
+{
+	[Serializable]
+	public class Log
+	{
+		public string text;
+		public string textUnformatted;
+		public string stackTrace;
+		public LogType type;
+		public string[] channels;
+		public int hash;
+		public int timeMonth;
+		public int timeDay;
+		public int timeHour;
+		public int timeMinute;
+		public int timeSecond;
+		public Object context;
+		public bool isCompileErrorOrWarning;
+
+		[NonSerialized]
+		private GUIContent contextIcon;
+		[NonSerialized]
+		private bool contextIconLoaded;
+
+		public GUIContent ContextIcon
+		{
+			get
+			{
+				if(!contextIconLoaded)
+				{
+					contextIconLoaded = true;
+					contextIcon = context == null ? GUIContent.none : new GUIContent("", EditorGUIUtility.ObjectContent(context, context.GetType()).image, context.name);
+				}
+				return contextIcon;
+			}
+		}
+
+		public double AgeInSeconds
+		{
+			get
+			{
+				var now = DateTime.UtcNow;
+				var timestamp = new DateTime(now.Year, timeMonth, timeDay, timeHour, timeMinute, timeSecond);
+				return (now - timestamp).TotalSeconds;
+			}
+		}
+
+		public Log() { }
+
+		public Log(string text, string stackTrace, LogType type, Object context, bool isCompileErrorOrWarning)
+		{
+			if(text == null)
+			{
+				text = "";
+			}
+
+			this.text = text;
+			this.stackTrace = stackTrace;
+			this.type = type;
+			this.context = context;
+			this.isCompileErrorOrWarning = isCompileErrorOrWarning;
+
+			var now = DateTime.UtcNow;
+			timeMonth = now.Month;
+			timeDay = now.Day;
+			timeHour = now.Hour;
+			timeMinute = now.Minute;
+			timeSecond = now.Second;
+
+			textUnformatted = text;
+
+			int length = text.Length;
+			if(length > 0)
+			{
+				int from = text.IndexOf('<');
+				if(from != -1)
+				{
+					for(int to = textUnformatted.IndexOf('>', from + 1); to != -1; to = textUnformatted.IndexOf('>', from + 1))
+					{
+						textUnformatted = textUnformatted.Substring(0, from) + textUnformatted.Substring(to + 1);
+						from = textUnformatted.IndexOf('<');
+						if(from == -1)
+						{
+							break;
+						}
+					}
+				}
+
+				unchecked
+				{
+					const int LargePrimeNumber = 486187739;
+					hash = textUnformatted.GetHashCode() + LargePrimeNumber * (int)type;
+				}
+
+				length = textUnformatted.Length;
+				if(length > 0 && textUnformatted[0] == '[')
+				{
+					from = 0;
+					for(int to = textUnformatted.IndexOf(']', 1); to != -1; to = textUnformatted.IndexOf(']', from + 1))
+					{
+						string channel = textUnformatted.Substring(from + 1, to - from - 1);
+
+						if(channels == null)
+						{
+							channels = new string[] { channel };
+						}
+						else
+						{
+							switch(channels.Length)
+							{
+								case 1:
+									channels = new string[] { channels[0], channel };
+									break;
+								case 2:
+									channels = new string[] { channels[0], channels[1], channel };
+									break;
+								case 3:
+									channels = new string[] { channels[0], channels[1], channels[2], channel };
+									break;
+							}
+						}
+
+						from = to + 1;
+
+						if(length <= from || textUnformatted[from] != '[')
+						{
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		public Log(string textUnformatted, string textFormatted, string stackTrace, LogType type, Object context, bool isCompileErrorOrWarning)
+		{
+			if(textFormatted == null)
+			{
+				textFormatted = "";
+			}
+			if(textUnformatted == null)
+			{
+				textUnformatted = "";
+			}
+
+			text = textFormatted;
+			this.stackTrace = stackTrace;
+			this.type = type;
+			this.context = context;
+			this.isCompileErrorOrWarning = isCompileErrorOrWarning;
+
+			var now = DateTime.UtcNow;
+			timeMonth = now.Month;
+			timeDay = now.Day;
+			timeHour = now.Hour;
+			timeMinute = now.Minute;
+			timeSecond = now.Second;
+
+			this.textUnformatted = textUnformatted;
+
+			int length = text.Length;
+			if(length > 0)
+			{
+				int from = text.IndexOf('<');
+				if(from != -1)
+				{
+					for(int to = textUnformatted.IndexOf('>', from + 1); to != -1; to = textUnformatted.IndexOf('>', from + 1))
+					{
+						textUnformatted = textUnformatted.Substring(0, from) + textUnformatted.Substring(to + 1);
+						from = textUnformatted.IndexOf('<');
+						if(from == -1)
+						{
+							break;
+						}
+					}
+				}
+
+				hash = textUnformatted.GetHashCode();
+
+				length = textUnformatted.Length;
+				if(length > 0 && textUnformatted[0] == '[')
+				{
+					from = 0;
+					for(int to = textUnformatted.IndexOf(']', 1); to != -1; to = textUnformatted.IndexOf(']', from + 1))
+					{
+						string channel = textUnformatted.Substring(from + 1, to - from - 1);
+
+						if(channels == null)
+						{
+							channels = new string[] { channel };
+						}
+						else
+						{
+							switch(channels.Length)
+							{
+								case 1:
+									channels = new string[] { channels[0], channel };
+									break;
+								case 2:
+									channels = new string[] { channels[0], channels[1], channel };
+									break;
+								case 3:
+									channels = new string[] { channels[0], channels[1], channels[2], channel };
+									break;
+							}
+						}
+
+						from = to + 1;
+
+						if(length <= from || textUnformatted[from] != '[')
+						{
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+}
