@@ -103,18 +103,18 @@ public class ProductsController : MonoBehaviour {
         foreach (Product product in list) {
             if (product.productInfo.name.Contains(query, StringComparison.CurrentCultureIgnoreCase)) {
                 searchResult.Add(product);
-                break;
+                continue;
             }
             foreach(ProductCategory category in product.productInfo.categories) {
                 if(category.name.Contains(query, StringComparison.CurrentCultureIgnoreCase)) {
                     searchResult.Add(product);
-                    break;
+                    continue;
                 }
             }
             foreach(ProductTag tag in product.productInfo.tags) {
                 if(tag.name.Contains(query, StringComparison.CurrentCultureIgnoreCase)){
                     searchResult.Add(product);
-                    break;
+                    continue;
                 }
             }
         }
