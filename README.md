@@ -8,6 +8,8 @@ If you have a VR headset and wish to try out the application (greatly appreciate
 
 https://github.com/xKrystalx/Store-VR-Unity/releases/tag/
 
+Video overview: https://www.youtube.com/watch?v=1eofUwMytL8
+
 # Instructions
 
 Should work with any SteamVR headset. Configurations were made for Index Controllers, Oculus Touch and Vive wands.
