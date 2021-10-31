@@ -114,8 +114,8 @@ public class ShelfController : MonoBehaviour {
 
             slot.GetComponent<BoxCollider>().size = itemPrefab.GetComponent<BoxCollider>().size;
 
-            //Calculate width of each slot
-            float finalSpacing = (i == 0 ? 0.0f : 1.0f) * spacing;
+            //Calculate position of each slot
+            float finalSpacing = (i == 0 ? 0.0f : spacing);
 
             slot.transform.localPosition = new Vector3(slot.transform.localPosition.x + (categoryWidth / 2) - slotOffset - (slotOffset * 2 *i) - finalSpacing, slot.transform.localPosition.y, slot.transform.localPosition.z);
 
@@ -123,22 +123,16 @@ public class ShelfController : MonoBehaviour {
 
             ItemPropertiesScript properties = item.GetComponent<ItemPropertiesScript>();
 
-            //Instantiation check
-
-            while (properties.GetItem() == null) {
-                yield return null;
-            }
+            properties.SetProduct(product);
 
             //Download the respective thumbnails
 
-            if (product.thumbnail == null) {
+            if (product.Thumbnail == null) {
                 productsController.GetProductImage(product.productInfo.images[0].src, result => {
                     Debug.Log("[Download Manager][Complete] %s", product.productInfo.images[0].src);
-                    properties.GetItem().Thumbnail = Sprite.Create(result, new Rect(0.0f, 0.0f, result.width, result.height), new Vector2(0.5f, 0.5f));
-                    product.thumbnail = properties.GetItem().Thumbnail;
+                    product.Thumbnail = Sprite.Create(result, new Rect(0.0f, 0.0f, result.width, result.height), new Vector2(0.5f, 0.5f));
                 });
             }
-            properties.UpdateItem(product);
 
             //Match the model prefabs to the products
 
@@ -153,7 +147,7 @@ public class ShelfController : MonoBehaviour {
             ModelProperties modelProperties = instance.GetComponent<ModelProperties>();
             if (modelProperties) {
                 if (modelProperties.SKU == product.productInfo.sku) {
-                    properties.GetItem().modelPrefab = obj;
+                    properties.GetProduct().modelPrefab = obj;
 
                     Collider collider = instance.GetComponent<Collider>();
                     Collider displayCollider = properties.modelDisplaySlot.GetComponent<Collider>();
@@ -177,40 +171,27 @@ public class ShelfController : MonoBehaviour {
 
                     //Rescale to fit in the display
 
-                    //Debug.Log("[Collider] Model Size: " + collider.bounds.size);
-                    //Debug.Log("[Collider] Display Size: " + displayCollider.bounds.size);
-
                     if (collider.bounds.size.x > displayCollider.bounds.size.x) {
-                        //Debug.Log("[Colliders] Too big X");
                         float scale = displayCollider.bounds.size.x / collider.bounds.size.x;
 
                         instance.transform.localScale *= scale;
-                        //Debug.Log("[Collider][X] Model Size: " + collider.bounds.size);
-                        //Debug.Log("[Collider][x] Display Size: " + displayCollider.bounds.size);
                     }
 
                     Physics.SyncTransforms();
 
                     if (collider.bounds.size.y > displayCollider.bounds.size.y) {
-                        //Debug.Log("[Colliders] Too big Y");
                         float scale = displayCollider.bounds.size.y / collider.bounds.size.y;
 
                         instance.transform.localScale *= scale;
-                        //Debug.Log("[Collider][Y] Model Size: " + collider.bounds.size);
-                        //Debug.Log("[Collider][Y] Display Size: " + displayCollider.bounds.size);
                     }
 
                     Physics.SyncTransforms();
 
                     if (collider.bounds.size.z > displayCollider.bounds.size.z) {
-                        //Debug.Log("[Colliders] Too big Z");
                         float scale = displayCollider.bounds.size.z / collider.bounds.size.z;
 
                         instance.transform.localScale *= scale;
-                        //Debug.Log("[Collider][Z] Model Size: " + collider.bounds.size);
-                        //Debug.Log("[Collider][Z] Display Size: " + displayCollider.bounds.size);
                     }
-                    //Debug.CancelLogChanges(() => instance.transform.localScale);
 
                     Helpers.SnapToBoundInternal(Helpers.Sides.BOTTOM, instance, properties.modelDisplaySlot);
 

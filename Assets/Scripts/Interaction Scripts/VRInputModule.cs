@@ -90,7 +90,7 @@ public class VRInputModule : BaseInputModule
     }
 
     public void Release(PointerEventData data) {
-        if (data.pointerCurrentRaycast.distance > pointer.defaultLength && pointer.defaultLength > 0) {
+        if ((data.pointerCurrentRaycast.distance == 0 || data.pointerCurrentRaycast.distance > pointer.defaultLength) && pointer.defaultLength > 0) {
             if (eventSystem.currentSelectedGameObject != null && eventSystem.currentSelectedGameObject != data.pointerPressRaycast.gameObject) {
                 eventSystem.SetSelectedGameObject(null);
             }

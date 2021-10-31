@@ -99,57 +99,6 @@ public class SlotController : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider other) {
-        //bool valid = false;
-        //GameObject target = null;
-        //if (mode == Modes.Slot) {
-        //    target = other.transform.parent?.gameObject;
-        //}
-        //else if (mode == Modes.DisplaySlot) {
-        //    target = other.gameObject;
-        //}
-        //if(target == null) {
-        //    return;
-        //}
-        //foreach (string tag in tagsToAccept) {
-        //    if (target.tag == tag) {
-        //        valid = true;
-        //        break;
-        //    }
-        //}
-
-        //if (!valid) {
-        //    return;
-        //}
-
-        //if (mode == Modes.Slot) {
-        //    if (!target.GetComponentInParent<ItemPropertiesScript>() || target.GetComponentInParent<Hand>() != null || currentItem) {
-        //        return;
-        //    }
-        //    currentItem = target;
-        //    currentItem.GetComponentInParent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        //}
-
-        ////Model itself checked for collision
-
-        //if (mode == Modes.DisplaySlot) {
-        //    if (!target.GetComponent<ModelProperties>() || target.GetComponentInParent<Hand>() != null) {
-        //        return;
-        //    }
-        //    Destroy(currentItem);
-        //    currentItem = target;
-        //    currentItem.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        //}
-
-        //currentItem.transform.SetParent(transform);
-        //currentItem.transform.localPosition = Vector3.zero;
-        //currentItem.transform.localRotation = Quaternion.identity;
-
-        //TriggerEnter.Invoke(currentItem);
-        
-
-        //if (snapToBottom) {
-        //    Helpers.SnapToBoundInternal(Helpers.Sides.BOTTOM, currentItem, gameObject);
-        //}
     }
 
     private void OnTriggerExit(Collider other) {
@@ -192,19 +141,3 @@ public class SlotController : MonoBehaviour {
 
     }
 }
-
-//#region CustomEditor
-//#if UNITY_EDITOR
-
-//[CustomEditor(typeof(SlotController)), CanEditMultipleObjects]
-//public class SlotControllerCustomEditor : Editor {
-//    public override void OnInspectorGUI() {
-//        base.DrawDefaultInspector();
-
-//        List<string> tags = new List<string>();
-
-//        SlotController script = (SlotController)target;
-//    }
-//}
-//#endif
-//#endregion

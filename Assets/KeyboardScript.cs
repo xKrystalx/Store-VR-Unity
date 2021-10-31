@@ -7,7 +7,7 @@ using System;
 
 public class KeyboardScript : MonoBehaviour
 {
-    protected TMP_InputField textEntry;
+    protected TMP_InputField inputField;
     string text = "";
     static bool keyboardShowing;
     static KeyboardScript activeKeyboard = null;
@@ -25,16 +25,12 @@ public class KeyboardScript : MonoBehaviour
     }
 
     private void OnKeyboard(VREvent_t args) {
-        Debug.Log("yo");
         if(activeKeyboard != this) {
             return;
         }
 
         VREvent_Keyboard_t keyboard = args.data.keyboard;
-        byte[] inputBytes = new byte[] { keyboard.cNewInput0, keyboard.cNewInput1, keyboard.cNewInput2, keyboard.cNewInput3, keyboard.cNewInput4, keyboard.cNewInput5, keyboard.cNewInput6, keyboard.cNewInput7 };
-        int len = 0;
-        for (; inputBytes[len] != 0 && len < 7; len++) ;
-        string input = System.Text.Encoding.UTF8.GetString(inputBytes, 0, len);
+        string input = keyboard.cNewInput;
 
         if (minimalMode) {
             if (input == "\b") {
@@ -51,14 +47,13 @@ public class KeyboardScript : MonoBehaviour
             else {
                 text += input;
             }
-            textEntry.text = text;
+            inputField.text = text;
         }
         else {
-            textEntry.text = text;
             System.Text.StringBuilder textBuilder = new System.Text.StringBuilder(1024);
             uint size = SteamVR.instance.overlay.GetKeyboardText(textBuilder, 1024);
             text = textBuilder.ToString();
-            textEntry.text = text;
+            inputField.text = text;
         }
     }
 
@@ -68,20 +63,18 @@ public class KeyboardScript : MonoBehaviour
         }
         keyboardShowing = false;
         activeKeyboard = null;
-
-        Debug.Log("KeyboardClosed");
     }
 
     private void OnKeyboardDone(VREvent_t args) {
-        Debug.Log("KeyboardDone");
     }
 
     public void ShowKeyboard(TMP_InputField target, string description, bool isPassword = false) {
+        Debug.Log("Showing");
         if (!keyboardShowing) {
             keyboardShowing = true;
             activeKeyboard = this;
 
-            textEntry = target;
+            inputField = target;
             int inputMode = isPassword ? (int)EGamepadTextInputMode.k_EGamepadTextInputModePassword : (int)EGamepadTextInputMode.k_EGamepadTextInputModeNormal;
             int lineMode = (int)EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine;
 

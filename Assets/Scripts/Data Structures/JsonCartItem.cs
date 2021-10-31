@@ -12,9 +12,4 @@ public class JsonCartItem
 {
     public int product_id;
     public int quantity;
-
-    //public JsonCartItem(int id, int quantity) {
-    //    this.id = id;
-    //    this.quantity = quantity;
-    //}
 }

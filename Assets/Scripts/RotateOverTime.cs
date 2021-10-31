@@ -51,7 +51,7 @@ public class RotateOverTime : MonoBehaviour
             transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, Mathf.Lerp(0.0f, 359.0f, animationCurve.Evaluate(_animationTime)), transform.localRotation.eulerAngles.z);
 
             _animationTime += Time.deltaTime;
-            if (_animationTime > 1000.0f) {
+            if (_animationTime >= animationCurve[animationCurve.length-1].time) {
                 _animationTime = 0.0f;
             }
             yield return null;

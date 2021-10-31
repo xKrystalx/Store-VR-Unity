@@ -44,23 +44,13 @@ public class ReturnAngleAnimation : MonoBehaviour
 
     IEnumerator Rotate() {
         float animationTime = 0.0f;
-        Vector3 rotationAxis = Vector3.zero;
-        rotationAxis[(int)circularDrive.axisOfRotation] = 1.0f;
-        bool negative = false;
 
-        if(circularDrive.minAngle < 0 || circularDrive.maxAngle < 0) {
-            negative = true;
-        }
-
-        while (linearMapping.value < 1) {
-            float mappedLinearValue = Mathf.Lerp(linearMapping.value, 1.0f, animationCurve.Evaluate(animationTime));
-
-            float angle = Mathf.Lerp(circularDrive.minAngle, circularDrive.maxAngle, mappedLinearValue);
+        while (linearMapping.value < 1.0f) {
+            float angle = Mathf.Lerp(circularDrive.outAngle, circularDrive.maxAngle, animationCurve.Evaluate(animationTime));
 
             Vector3 temp = transform.localRotation.eulerAngles;
             temp[(int)circularDrive.axisOfRotation] = angle;
             circularDrive.outAngle = angle;
-            linearMapping.value = mappedLinearValue;
             transform.localRotation = Quaternion.Euler(temp);
             animationTime += Time.deltaTime;
             yield return null;

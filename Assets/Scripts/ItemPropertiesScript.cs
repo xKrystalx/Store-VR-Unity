@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class ItemPropertiesScript : MonoBehaviour
 {
+    public delegate void ProductChange(Product previous, Product current);
+    public ProductChange OnProductChanged;
+
     public string initialSKU;
     public bool isUpdateRequired;
 
@@ -22,15 +25,12 @@ public class ItemPropertiesScript : MonoBehaviour
     }
 
     [SerializeReference]
-    public Item item;
+    public Product product;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        if (item == null) {
-            item = new Item(0, initialSKU, 0.0f, "", "");
-        }
         // GameObject canvas = gameObject.transform.Find("ProductCanvas").gameObject;
         // canvas.transform.GetChild(0).gameObject.GetComponent<Text>().text = itemTitle.ToString();
         // canvas.transform.GetChild(1).gameObject.GetComponent<Text>().text = itemDescription.ToString();
@@ -46,16 +46,13 @@ public class ItemPropertiesScript : MonoBehaviour
         
     }
 
-    public Item GetItem(){
-        return item;
+    public Product GetProduct(){
+        return product;
     }
 
-    public void UpdateItem(Product product){
-        if(item == null) {
-            return;
-        }
-        item.UpdateItem(product);
-        isUpdateRequired = true;
+    public void SetProduct(Product product) {
+        OnProductChanged?.Invoke(this.product, product);
+        this.product = product;
     }
 
     public void ResetPosition(){

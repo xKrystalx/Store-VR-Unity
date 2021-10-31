@@ -23,9 +23,7 @@ public class Login : MonoBehaviour
             StartCoroutine(sendRequest(usernameInput.text, passwordInput.text));
         }
         else {
-            if(usernameInput.text.Length == 0 || passwordInput.text.Length == 0) {
-                return;
-            }
+            return;
         }
     }
 

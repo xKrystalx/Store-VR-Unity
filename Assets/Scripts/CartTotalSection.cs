@@ -22,5 +22,4 @@ public class CartTotalSection : MonoBehaviour
         }
         totalPrice.text = total.ToString();
     }
-
 }

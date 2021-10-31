@@ -4,11 +4,34 @@ using UnityEngine;
 
 public class Product
 {
-    public ProductInfo productInfo;
-    public Sprite thumbnail;
+    public delegate void ItemUpdate(Product product);
+    public ItemUpdate OnItemUpdated;
 
-    public Product(ProductInfo info, Sprite thumb = null) {
+    public delegate void ImageUpdate(Sprite img);
+    public ImageUpdate OnImageUpdated;
+
+    public GameObject modelPrefab;
+    public ProductInfo productInfo;
+
+    [SerializeReference]
+    private Sprite _thumbnail;
+    public Sprite Thumbnail
+    {
+        get {
+            return _thumbnail;
+        }
+        set {
+            _thumbnail = value;
+            OnImageUpdated?.Invoke(value);
+        }
+    }
+    public Product() { }
+    public Product(ProductInfo info) {
         productInfo = info;
-        thumbnail = thumb;
+    }
+
+    public void UpdateProductInfo(ProductInfo info) {
+        productInfo = info;
+        OnItemUpdated?.Invoke(this);
     }
 }

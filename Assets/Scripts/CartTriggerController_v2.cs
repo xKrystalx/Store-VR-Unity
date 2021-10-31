@@ -31,7 +31,7 @@ public class CartTriggerController_v2 : MonoBehaviour
             return;
         }
         foreach (CartObjectData cartObj in _cartObjects) {
-            if(target.GetComponent<ItemPropertiesScript>().GetItem().id == cartObj.obj.GetComponent<ItemPropertiesScript>().GetItem().id) {
+            if(target.GetComponent<ItemPropertiesScript>().GetProduct().productInfo.id == cartObj.obj.GetComponent<ItemPropertiesScript>().GetProduct().productInfo.id) {
 
                 ChangeQuantity(cartObj, 1);
 
@@ -40,8 +40,8 @@ public class CartTriggerController_v2 : MonoBehaviour
             }
         }
         ItemPropertiesScript properties = target.GetComponent<ItemPropertiesScript>();
-        Item item = properties.GetItem();
-        CartItem cartItem = new CartItem(item.id, item.sku, item.title, 1, item.price);
+        ProductInfo productInfo = properties.GetProduct().productInfo;
+        CartItem cartItem = new CartItem(productInfo.id, productInfo.sku, productInfo.name, 1, productInfo.price);
         Cart.Instance.AddItem(cartItem);
 
         CartObjectData newItem = new CartObjectData(target, cartItem);
@@ -63,7 +63,7 @@ public class CartTriggerController_v2 : MonoBehaviour
         foreach(CartObjectData data in _cartObjects) {
             if (data.obj == target) {
                 data.animationTime += Time.deltaTime;
-                float velocityMultiplier = Mathf.Lerp(1.0f, 0.0f, velocityCurve.Evaluate(data.animationTime));;
+                float velocityMultiplier = Mathf.Lerp(0.0f, 1.0f, velocityCurve.Evaluate(data.animationTime));;
                 if (velocityMultiplier <= 0.0f) {
                     rigidbody.useGravity = false;
                 }

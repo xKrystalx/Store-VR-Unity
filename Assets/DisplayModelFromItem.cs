@@ -15,13 +15,13 @@ public class DisplayModelFromItem : MonoBehaviour
     public void DisplayItem(GameObject item) {
         ItemPropertiesScript properties = item.GetComponent<ItemPropertiesScript>();
 
-        Item itemObj = properties.GetItem();
+        Product itemObj = properties.GetProduct();
 
         if (!itemObj.modelPrefab) {
             return;
         }
 
-        foreach (ProductTag tag in itemObj.Product.productInfo.tags) {
+        foreach (ProductTag tag in itemObj.productInfo.tags) {
             if (tag.name.Contains(bigSlotTag)) {
                 GameObject newObj = Instantiate(itemObj.modelPrefab, bigSlot.transform);
                 newObj.tag = "product_model_big";

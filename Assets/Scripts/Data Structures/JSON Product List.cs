@@ -9,7 +9,7 @@ public class ProductInfo {
     public string name;
     public string description;
     public string short_description;
-    public string price;
+    public float price;
     public bool featured;
     public List<ProductImage> images;
     public List<ProductCategory> categories;

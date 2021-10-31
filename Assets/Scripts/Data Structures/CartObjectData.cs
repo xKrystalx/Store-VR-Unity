@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CartObjectData {
     public GameObject obj;
-    public Item item;
+    public Product item;
     public CartItem cartItem;
     public float animationTime;
     public Vector3 initialVelocity;
@@ -12,7 +12,7 @@ public class CartObjectData {
 
     public CartObjectData(GameObject obj, CartItem item) {
         this.obj = obj;
-        this.item = obj.GetComponent<ItemPropertiesScript>().GetItem();
+        this.item = obj.GetComponent<ItemPropertiesScript>().GetProduct();
         this.cartItem = item;
         this.animationTime = 0.0f;
         this.initialVelocity = obj.GetComponent<Rigidbody>().velocity;

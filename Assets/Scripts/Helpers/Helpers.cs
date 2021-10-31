@@ -30,6 +30,8 @@ public static class Helpers
             initiallyDisabled = true;
         }
 
+        Physics.SyncTransforms();
+
         switch (side) {
             case Sides.TOP: {
                     Vector3 offset = new Vector3(0.0f, targetCollider.bounds.max.y - destCollider.bounds.max.y, 0.0f);

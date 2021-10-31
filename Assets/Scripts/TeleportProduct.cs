@@ -20,7 +20,7 @@ public class TeleportProduct : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        Transform interactable = other.GetComponentInParent<Interactable>().transform?? null;
+        Transform interactable = other.GetComponentInParent<Interactable>()?.transform?? null;
         if (interactable != null && interactable.GetComponentInParent<Hand>() == null && interactable.parent == null && destination != null && interactable.tag == productTag) {
             interactable.position = destination.position;
             Rigidbody rb = interactable.GetComponent<Rigidbody>();
